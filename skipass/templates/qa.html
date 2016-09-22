@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load poll_extras %}
+{% load static from staticfiles%}
+
+
+
+{% block content %}
+
+
+<script>
+$(document).ready(function(){
+    $("#qa").on('click', '.question', function(){
+        var $this = $(this);
+        $this.find('.answer').slideToggle(300);
+        $(this).toggleClass("active");
+    });
+});
+</script>
+
+<div id="all">
+<div id="content">
+<div class="container">
+
+    <div class="col-sm-9" id="blog-listing">
+    <div class="box">
+
+                        <h1>Вопросы и ответы</h1>
+
+
+
+    <div id="qa"> {% for q in qa %}<div class="question panel panel-primary"><div class="panel-heading"> <h4 class="panel-title">{{ q.question }}</h4></div> <div class="answer">{{ q.answer }}</div></div>
+    {% endfor %}</div>
+
+                    </div>
+        </div>
+<div class="vk">
+                    <!-- *** BLOG MENU ***
+ _________________________________________________________ -->
+
+
+
+
+
+
+                            <script type="text/javascript" src="//vk.com/js/api/openapi.js?127"></script>
+
+<!-- VK Widget -->
+<div id="vk_groups"></div>
+<script type="text/javascript">
+VK.Widgets.Group("vk_groups", {mode: 4, wide: 1, width: "220", height: "400", color1: 'FFFFFF', color2: '000000', color3: '5E81A8'}, 64599889);
+</script>
+
+
+
+                    <!-- /.col-md-3 -->
+</div></div></div>
+    </div>
+    </div>
+</div>
+
+
+{% endblock %}

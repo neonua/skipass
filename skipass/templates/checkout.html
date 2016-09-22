@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load poll_extras %}
+{% load static from staticfiles%}
+
+
+
+{% block content %}
+
+    <script type="text/javascript">
+      function funcSuccess(json) {
+        $('#'+json.id + ' .count').val(json.count);
+    };
+    </script>
+
+    <script type="text/javascript">
+
+$( document ).ready(function() {
+    var item = 0;
+
+    $("#basket").on('click', '.delitem', function () {
+
+        $('#'+$(this).data('id')).remove();
+    var summ = 0;
+        $(".items-cart").each(function () {
+            var $this = $(this);
+            var count = $this.find(".count").val();
+            var price = $this.find(".price").text();
+            var total_price = parseInt(price) * count;
+
+            $this.find(".total_price").text(total_price);
+
+            summ += total_price;
+        });
+        $('#summ').text(summ + ' грн');
+        $.ajax({
+            url: $(this).data("del"),
+            type: "POST",
+            dataType: 'json',
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}', summ: summ},
+            success: function (json) {
+
+
+            },
+
+        });
+    });
+});
+        </script>
+
+     <script type="text/javascript">
+    $( document ).ready(function() {
+$('#form').on('submit', function (event) {
+    event.preventDefault();
+        var frm = $('#form');
+
+        $.ajax({
+            url: "/checkout/",
+            type: "POST",
+
+            data: frm.serialize(),
+            beforeSend: function () {
+               $('#form').html('<div id="json-form"><img id="imgcode" src="/static/loader/1.gif"></div>');
+            },
+            success: function(json) {
+            if (json.message == true){
+                window.location = json.window;};
+    },
+        });
+    });
+    });
+</script>
+
+
+<div id="content">
+<div class="container">
+    <div class="col-md-9" id="basket">
+
+                    <div class="box">
+
+
+
+                            <h1>Оформление заказа</h1>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="1">Найменование</th>
+                                            <th>Количество</th>
+                                            <th>Цена за единицу</th>
+                                            <th colspan="1">Цена суммарная</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <div id="target">
+
+                                    {% for key,count in ses.iteritems %}
+
+                                        <tr id="{{ key }}" class="items-cart">
+
+                                            <td>{{ key|skip }}</td>
+                                            <td>
+                                                {{ count }} шт
+                                            </td>
+                                            <td class="price">{{ key|price_one }} грн</td>
+                                            <td class="total_price">{{ key|price:count }} грн</td>
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="5"></th>
+                                            <th id="summ" colspan="2">{{ summ }} грн</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                            </div>
+                            <!-- /.table-responsive -->
+
+<form action="/checkout/" method="post" enctype="multipart/form-data" id="form">
+    <div class="content">
+        <div class="row">
+
+                        {% csrf_token %}
+
+    {% for i in form %}
+        <div class="col-sm-6">
+            <div class="form-group">
+
+                <label>{{ i.label }}</label>
+                {% if i.errors %}
+            <div class="alert-form alert alert-danger">{{ i.errors }}</div>
+        {% endif %}
+        {{ i }}
+        </div>
+
+        </div>
+
+    {% endfor %}
+</div></div>
+                            <div class="box-footer">
+                                <div class="pull-left">
+                                    <a href="/cart/" class="btn btn-default"><i class="fa fa-chevron-left"></i> Вернуться в корзину</a>
+                                </div>
+                                <div class="pull-right">
+                                    <button class="btn btn-primary" type="submit">Сделать заказ <i class="fa fa-chevron-right"></i></button>
+
+</form>
+
+                                </div>
+                            </div>
+
+
+                    </div>
+                    </div>
+                    <!-- /.box -->
+</div>
+
+
+</div>
+</div>
+
+{% endblock %}

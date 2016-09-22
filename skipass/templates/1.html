@@ -1,0 +1,40 @@
+{% load poll_extras %}
+{% load static from staticfiles%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<a href="/delall/">/Очистить корзину\ </a>
+<a href="/">  /Продолжить покупки\</a>
+<a href="/">  /Оформить заказ\</a>
+<table>
+<tbody>
+{% for key,count in ses.iteritems %}
+    <tr>
+        <td>{{ key|skip }},</td>
+        <td>Количество:</td>
+        <form action="/add/{{ key|seasid }}/{{ key|id }}/"
+                  method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+        <td><input type="text" name="count" value={{ count }}>
+            <input type="submit" value="+" name="add_button"/>
+        </td>
+
+        </form>
+        <td>Сума: {{ key|price:count }}</td>
+    <td><a href="/delski/{{ key|seasid }}/{{ key|id }}/">X</a></td>
+    </tr>
+
+
+{% endfor %}
+</tbody>
+</table>
+<p>Общая сума:{{ summ }}</p>
+
+
+</body>
+</html>

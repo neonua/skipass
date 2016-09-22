@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load poll_extras %}
+{% load static from staticfiles%}
+
+
+
+{% block content %}
+<div id="content">
+<div class="container">
+    <div class="col-md-9" id="basket">
+
+                    <div class="box">
+
+                    {% if abonements_low %}
+                            <h1>Скипассы - Низкий сезон</h1>
+
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+
+
+                                        {% for i in seasons %}{%   if i.name == 'Низкий' and i.promo_set.all  %}<tr><th></th>{% for p in  i.promo_set.all %}<th>Акция {{ p }}</th>{% endfor %}</tr>{% endif %}{% endfor %}
+
+
+                                        <tr>
+                                        <th>Количество дней<p class="active">(не зависимо от кол-ва подъемов)</p></th>
+
+                                            {% for i in seasons %}
+                                                {%   if i.name == 'Низкий' or i.name == 'В кассах ГК Буковель' %}
+    <th>{{ i.name }} {% if i.active %}<p class="active">Активен: {{ i.active }}</p>{% endif %}{% if i.not_active %}<p class="not_active">Не активен: {{ i.not_active }}</p>{% endif %} </th>
+{% endif %}
+{% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for t in abonements_low %}
+                                        <tr>
+                                            <td>{{ t.name|days }}</td>
+                                            <td><div class="price_blk">{{ t.price }} грн</div>  <a class="btn btn-primary price_index" href="/acart_low/{{ t.id }}/"><i class="fa fa-shopping-cart"></i>Купить</a></td>
+                                            <td><div class="price_blk">{{ t.bukovel_price }} грн</div></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+
+                                </table>
+<div class="row">
+                            <div class="col-sm-4">
+                                <h3><i class="fa fa-map-marker"></i> что-то</h3>
+
+
+                            </div>
+                            <!-- /.col-sm-4 -->
+                            <div class="col-sm-4">
+                                <h3><i class="fa fa-phone"></i> что-то</h3>
+                                <p class="text-muted">описание для чего-то там.</p>
+
+                            </div>
+                            <!-- /.col-sm-4 -->
+                            <div class="col-sm-4">
+                                <h3><i class="fa fa-envelope"></i> что-то</h3>
+                                <p class="text-muted">описание для чего-то там.</p>
+
+                            </div>
+
+                            <!-- /.col-sm-4 -->
+                        </div>
+
+                            </div>
+                            <!-- /.table-responsive -->
+                    {% else %}
+
+                        <h1>Скипасов для низкого сезона пока нет</h1>
+
+                    {% endif %}
+
+
+
+
+
+                    </div>
+
+                        <div class="box">
+
+
+
+                    {% if abonements_hight %}
+                            <h1>Скипассы - Высокий сезон</h1>
+
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                                                            {% for i in seasons %}{%   if i.name == 'Высокий' and i.promo_set.all  %}<tr><th></th>{% for p in  i.promo_set.all %}<th>Акция {{ p }}</th>{% endfor %}</tr>{% endif %}{% endfor %}
+
+                                        <tr>
+                                        <th>Количество дней<p class="active">(не зависимо от кол-ва подъемов)</p></th>
+
+                                            {% for i in seasons %}
+                                                {%   if i.name == 'Высокий' or i.name == 'В кассах ГК Буковель' %}
+    <th>{{ i.name }} {% if i.active %}<p class="active">Активен: {{ i.active }}</p>{% endif %}{% if i.not_active %}<p class="not_active">Не активен: {{ i.not_active }}</p>{% endif %} </th>
+{% endif %}
+{% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for t in abonements_hight %}
+                                        <tr>
+                                            <td>{% if t.desc_name %}{{ t.desc_name|days_desc }}{% else %}{{ t.name|days }}{% endif %}</td>
+                                            <td><div class="price_blk">{{ t.price }} грн</div>  <a class="btn btn-primary price_index" href="/acart_hight/{{ t.id }}/"><i class="fa fa-shopping-cart"></i>Купить</a></td>
+                                            <td><div class="price_blk">{{ t.bukovel_price }} грн</div></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+
+                                </table>
+
+
+                            </div>
+                            <!-- /.table-responsive -->
+                    {% else %}
+
+                        <h1>Скипасов для высокого сезона пока нет</h1>
+
+                    {% endif %}
+
+
+
+                    </div>
+                    <!-- /.box -->
+</div>
+<div class="vk">
+                    <!-- *** BLOG MENU ***
+ _________________________________________________________ -->
+
+
+
+
+
+
+                            <script type="text/javascript" src="//vk.com/js/api/openapi.js?127"></script>
+
+<!-- VK Widget -->
+<div id="vk_groups"></div>
+<script type="text/javascript">
+VK.Widgets.Group("vk_groups", {mode: 4, wide: 1, width: "220", height: "400", color1: 'FFFFFF', color2: '000000', color3: '5E81A8'}, 64599889);
+</script>
+
+
+
+                    <!-- /.col-md-3 -->
+</div></div></div>
+
+</div>
+</div>
+
+
+{% endblock %}

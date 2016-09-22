@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load poll_extras %}
+{% load static from staticfiles%}
+
+
+
+{% block content %}
+
+    <script>
+$(document).ready(function(){
+
+	$("#balance_form").submit(function(event) {
+
+    event.preventDefault();
+
+    $(".balance-container").html('');
+
+	var cardNumber = $('#ticket_id').val();
+
+		$.ajax({
+		  url: "http://shop.bukovel.info/index.php?route=balance/balance/getBalance&card_number=" + cardNumber,
+		  cache: false,
+            beforeSend: function () {
+               $('.balance-container').html('<div id="json-form"><img id="imgcode" src="/static/loader/1.gif"></div>');
+            },
+		  success: function(data){
+			  var json = $.parseJSON(data);
+              if(json.error){
+                  $(".balance-container").text('Вы ввели недействительный номер карты: ' + cardNumber);
+
+              }else{
+			   $(".balance-container").html(json.html);
+			}},
+
+		});
+	});
+});
+
+</script>
+
+
+
+<div id="all">
+<div id="content">
+<div class="container">
+
+    <div class="col-sm-9" id="blog-listing">
+    <div class="box">
+
+                        <h1>Проверка баланса абонемента</h1>
+
+<div class="balance-form">
+<form id="balance_form">
+<p>Введите номер карты:</p>
+<input id="ticket_id" class="form-control" type="text" placeholder="01-2345-67-890123" required="true">
+
+    <div class="balance-submit"> <input class="btn btn-primary" type="submit" value="Проверить"></div>
+</form>
+</div>
+
+        <div class="balance-container"> </div>
+                    </div>
+        </div>
+    <div class="vk">
+                    <!-- *** BLOG MENU ***
+ _________________________________________________________ -->
+
+
+
+
+
+
+                            <script type="text/javascript" src="//vk.com/js/api/openapi.js?127"></script>
+
+<!-- VK Widget -->
+<div id="vk_groups"></div>
+<script type="text/javascript">
+VK.Widgets.Group("vk_groups", {mode: 4, wide: 1, width: "220", height: "400", color1: 'FFFFFF', color2: '000000', color3: '5E81A8'}, 64599889);
+</script>
+
+
+
+                    <!-- /.col-md-3 -->
+</div></div></div>
+    </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load poll_extras %}
+{% load static from staticfiles%}<!DOCTYPE html>
+
+{% block content %}
+
+<div id="all">
+<div id="content">
+<div class="container">
+
+    <div class="col-sm-9" id="blog-listing">
+
+{% if promo %}
+{% for prom in promo %}
+                    <div class="post">
+                        <h2>{{ prom.promo_title }}</h2>
+
+                        </p>
+                        <hr>
+                        <p class="date-comments">
+                            <a href="post.html"><i class="fa fa-calendar-o"></i> {{ prom.promo_date }}</a>
+
+                        </p>
+                        <div class="image">
+                                {% if prom.promo_image %}
+                                <img src="{{ prom.promo_image.url }}" class="img-responsive" alt="Example blog post alt">
+                                {% else %}
+
+                                {% endif %}
+
+                        </div>
+                        <p class="intro">{{ prom.text|safe }}</p>
+
+                        </p>
+                    </div>
+{% endfor %}
+    {% else %}
+
+    <div class="box">
+
+    <h1>Акции отсутствуют</h1>
+
+    </div>
+{% endif %}
+
+
+
+                </div>
+<!-- /.col-md-9 -->
+
+                <!-- *** LEFT COLUMN END *** -->
+
+
+                <div class="vk">
+                    <!-- *** BLOG MENU ***
+ _________________________________________________________ -->
+
+
+
+
+
+
+                            <script type="text/javascript" src="//vk.com/js/api/openapi.js?127"></script>
+
+<!-- VK Widget -->
+<div id="vk_groups"></div>
+<script type="text/javascript">
+VK.Widgets.Group("vk_groups", {mode: 4, wide: 1, width: "220", height: "400", color1: 'FFFFFF', color2: '000000', color3: '5E81A8'}, 64599889);
+</script>
+
+
+
+                    <!-- /.col-md-3 -->
+</div></div>
+
+{% endblock %}

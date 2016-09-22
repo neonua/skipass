@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load poll_extras %}
+{% load static from staticfiles%}
+
+
+
+{% block content %}
+
+    <script>
+$(document).ready(function(){
+    $(".table-responsive").on('click', '.club_activ', function(){
+        var $this = $(this);
+        $('.answer_club').slideToggle(210);
+        $(this).toggleClass("active");
+    });
+});
+</script>
+
+
+<div id="content">
+<div class="container">
+    <div class="col-md-9 club-md-9" id="basket">
+
+        <div class="box">
+
+
+                {% if buy %}
+                            <h1>Клубные карты</h1>
+
+                            <div class="table-responsive">
+                                <table class="table club-table">
+                                    <thead>
+                                        <tr>
+                                        <th id="th_club"></th>
+                                        {% for cart in buy %}
+
+                                        <th>{{ cart.name }} <div class="club_activ"><p id="many_club"> > Больше информации</p>{% for desc in cart.clubcartbuydesc_set.all %} <div class="answer_club"><p class="club_p">{{ desc.desc }}</p></div>{% endfor %}</div></th>
+                                        {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <td id="td_club">
+                                        <div class="cart_blk"><b>Новая</b></div>
+                                        <div class="cart_blk"><b>Продление</b></div>
+
+                                    </td>
+                                    {% for cart in buy %}
+                                        <td>
+                                            <div class="cart_blk"><div class="price_blk"> {{ cart.new }} грн</div><a class="btn btn-primary price_index" href="/acart_new/{{ cart.id }}/"><i class="fa fa-shopping-cart"></i>Купить</a></div>
+
+
+                                            <div class="cart_blk"><div class="price_blk"> {{ cart.cont }} грн</div><a class="btn btn-primary price_index" href="/acart_cont/{{ cart.id }}/"><i class="fa fa-shopping-cart"></i>Купить</a></div>
+                                        </td>
+                                    {% endfor %}
+                                    </tbody>
+
+
+                                </table>
+<div class="row">
+                            <div class="col-sm-4">
+                                <h3><i class="fa fa-map-marker"></i> что-то</h3>
+
+
+                            </div>
+                            <!-- /.col-sm-4 -->
+                            <div class="col-sm-4">
+                                <h3><i class="fa fa-phone"></i> что-то</h3>
+                                <p class="text-muted">описание для чего-то там.</p>
+
+                            </div>
+                            <!-- /.col-sm-4 -->
+                            <div class="col-sm-4">
+                                <h3><i class="fa fa-envelope"></i> что-то</h3>
+                                <p class="text-muted">описание для чего-то там.</p>
+
+                            </div>
+                        </div>
+
+                            </div>
+                            <!-- /.table-responsive -->
+                {% else %}
+
+                    <h1>Клубных карт пока нет</h1>
+
+                {% endif %}
+
+
+
+
+                    </div>
+        <div class="box">
+
+
+                    {% if pay %}
+                            <h1>Пополнение карт «Дисконтная» и VIP Golden</h1>
+
+                            <div class="table-responsive ">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                        <th>Количество дней<p class="active">(не зависимо от кол-ва подъемов)</p></th>
+
+
+{% for i in seasons.filter %}
+    {% if i.name == 'Высокий' %}
+    <th>{{ i.name }} {% if i.active %}<p class="active">Активен: {{ i.active }}</p>{% endif %}{% if i.not_active %}<p class="not_active">Не активен: {{ i.not_active }}</p>{% endif %} </th>
+    {% endif %}
+{% endfor %}
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for p in pay %}
+                                        <tr>
+                                            <td>{{ p.days|days }}</td>
+                                            <td><div class="price_blk">{{ p.price}} грн</div>  <a class="btn btn-primary price_index" href="/acart_club/{{ p.id }}/"><i class="fa fa-shopping-cart"></i>Купить</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+
+                                </table>
+
+
+                            </div>
+                            <!-- /.table-responsive -->
+
+                    {% else %}
+
+                        <h1>Пополнений карт  пока нет</h1>
+
+                    {% endif %}
+
+
+
+                    </div>
+
+                    <!-- /.box -->
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+
+
+{% endblock %}

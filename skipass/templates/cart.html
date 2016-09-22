@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load poll_extras %}
+{% load static from staticfiles%}
+
+
+
+{% block content %}
+
+    <script type="text/javascript">
+      function funcSuccess(json) {
+        $('#'+json.id + ' .count').val(json.count);
+    };
+    </script>
+
+    <script type="text/javascript">
+$( document ).ready(function() {
+    var item = 0;
+
+    $("#basket").on('click', '.delitem', function () {
+
+        $('#'+$(this).data('id')).remove();
+    var summ = 0;
+        $(".items-cart").each(function () {
+            var $this = $(this);
+            var count = $this.find(".count").val();
+            var price = $this.find(".price").text();
+            var total_price = parseInt(price) * count;
+
+            $this.find(".total_price").text(total_price);
+
+            summ += total_price;
+        });
+        $('#summ').text(summ + ' грн');
+        $.ajax({
+            url: $(this).data("del"),
+            type: "POST",
+            dataType: 'json',
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}', summ: summ},
+            success: function (json) {
+
+
+            },
+
+        });
+    });
+});
+        </script>
+
+
+<script type="text/javascript">
+$( document ).ready(function() {
+    $("#basket").on('change', '.count',function () {
+        var summ = 0;
+        $(".items-cart").each(function () {
+            var $this = $(this);
+            var count = $this.find(".count").val();
+            if (count <= 0 ){
+                count = 1;
+            }
+            var price = $this.find(".price").text();
+
+            console.log(parseInt(price));
+            var total_price = parseInt(price) * count;
+
+            $this.find(".total_price").text(total_price + ' грн');
+
+            summ += total_price;
+        });
+
+        $('#summ').text(summ + ' грн');
+
+        $.ajax({
+            url: '/cart/',
+            type: "POST",
+            dataType: 'json',
+            data: { count: $(this).val(), id: $(this).data('item'), csrfmiddlewaretoken: '{{ csrf_token }}', summ: summ },
+            success: funcSuccess,
+
+        });
+
+
+    });
+
+});
+</script>
+<div id="content">
+<div class="container">
+    <div class="col-md-9" id="basket">
+
+                    <div class="box">
+
+
+                            {% if ses %}
+                            <h1>Корзина</h1>
+                            <p class="text-muted">{% if ses %}У вас {{ ses|length|count_cart }} в корзине{% else %}Корзина пустая{% endif %}</p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="1">Найменование</th>
+                                            <th>Количество</th>
+                                            <th>Цена за единицу</th>
+                                            <th colspan="1">Цена суммарная</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <div id="target">
+
+                                    {% for key,count in ses.iteritems %}
+
+                        {% csrf_token %}
+                                        <tr id="{{ key }}" class="items-cart">
+
+                                            <td>{{ key|skip }}</td>
+                                            <td>
+                                                <input type="hidden" name = "item" value={{ key }}>
+                                                <input type="number" value={{ count }} name="count" class="form-control count"  data-item="{{ key }}">
+                                            </td>
+                                            <td class="price">{{ key|price_one }} грн</td>
+                                            <td class="total_price">{{ key|price:count }} грн</td>
+                                            <td class="delitem" style="cursor: pointer" data-id="{{ key }}"data-del="/del/{{ key }}/" ><i class="fa fa-trash-o"></i></td>
+
+                                        </tr>
+                                    {% endfor %}
+                                        {{ test }}
+                                    {{ test2 }}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="5"></th>
+                                            <th id="summ" colspan="2">{{ summ }} грн</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                            </div>
+                            <!-- /.table-responsive -->
+
+                            <div class="box-footer">
+                                <div class="pull-left">
+                                    <a href="/" class="btn btn-default"><i class="fa fa-chevron-left"></i> Продолжить покупки</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="/delall/" class="btn btn-default-del"><i class="fa fa-trash-o"></i> Очистить корзину</a>
+                                    <a href="/checkout/" type="submit" class="btn btn-primary">Оформить заказ <i class="fa fa-chevron-right"></i></a>
+
+                                </div>
+                            </div>
+                                {% else %}
+                                <h1>Корзина пустая</h1>
+                                <p>Пожалуйста, добавьте товар в корзину</p>
+                                                                    <a href="/" class="btn btn-default"><i class="fa fa-chevron-left"></i> Начать покупки</a>
+
+                        {% endif %}
+                    </div>
+                    </div>
+                    <!-- /.box -->
+</div>
+
+
+</div>
+</div>
+{{ test }}
+
+{% endblock %}

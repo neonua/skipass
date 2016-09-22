@@ -1,0 +1,89 @@
+{% load poll_extras %}
+{% load static from staticfiles%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<p>Спасибо за заказ! Наш менеджер свяжется с Вами в ближайшее время!</p>
+<hr>
+
+
+<h2 style="padding: 5px; margin-bottom: 5px; margin-top: 5px;">Заказчик:</h2>
+<table class="table">
+
+    <tbody>
+    <tr>
+        <td style="padding: 4px;">Имя</td>
+        <td style="padding: 4px;">{{ name }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 4px;">Фамилия</td>
+        <td style="padding: 4px;">{{ sename }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 4px;">Email</td>
+        <td style="padding: 4px;">{{ email }}</td>
+    </tr>
+        <tr>
+        <td style="padding: 4px;">Номер телефона</td>
+        <td style="padding: 4px;">{{ phone }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 4px;">Город</td>
+        <td style="padding: 4px;">{{ town }}</td>
+    </tr>
+    {% if req %}
+    <tr>
+        <td style="padding: 4px;">Отделение новой почты</td>
+        <td style="padding: 4px;">№ {{ req }}</td>
+    </tr>
+    {% endif %}
+    </tbody>
+</table>
+<hr>
+
+<h2 style="padding: 5px; margin-bottom: 5px; margin-top: 5px;">Заказ:</h2>
+ <table class="table" style="border-collapse: collapse; border-spacing: 0; margin-bottom: 20px;">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="1" style="text-align: left; padding: 8px; line-height: 1.42857; vertical-align: top; border-bottom: 2px solid #ddd;">Найменование</th>
+                                            <th style="text-align: left; padding: 8px; line-height: 1.42857; vertical-align: top; border-bottom: 2px solid #ddd;">Количество</th>
+                                            <th style="text-align: left; padding: 8px; line-height: 1.42857; vertical-align: top; border-bottom: 2px solid #ddd;">Цена за единицу</th>
+                                            <th colspan="1" style="text-align: left; padding: 8px; line-height: 1.42857; vertical-align: top; border-bottom: 2px solid #ddd;">Цена суммарная</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <div id="target">
+
+                                    {% for key,count in ses.iteritems %}
+
+                                        <tr id="{{ key }}" class="items-cart">
+
+                                            <td style="border-top: 1px solid #ddd; line-height: 1.42857; padding: 8px;">{{ key|skip }}</td>
+                                            <td style="border-top: 1px solid #ddd; line-height: 1.42857; padding: 8px;">
+                                                {{ count }} шт
+                                            </td>
+                                            <td class="price" style="border-top: 1px solid #ddd; line-height: 1.42857; padding: 8px;">{{ key|price_one }} грн</td>
+                                            <td class="total_price" style="border-top: 1px solid #ddd; line-height: 1.42857; padding: 8px;">{{ key|price:count }} грн</td>
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot style="font-size: 16px; ">
+                                        <tr>
+                                            <th colspan="5" style="border-top: 1px solid #ddd; line-height: 1.42857; padding: 8px; vertical-align: top; text-align: left;">Суммарно</th>
+                                            <th id="summ" colspan="2" style="border-top: 1px solid #ddd; line-height: 1.42857; padding: 8px; vertical-align: top; text-align: left;">{{ summ }} грн</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+
+
+
+</body>
+</html>
